@@ -10,7 +10,7 @@ for (var i in td) {
 </script>
 
 <template>
-  <VarViewer :datapoints="td" />
+  <VarViewer :datapoints="td" title="A title" />
 </template>
 
 <style scoped></style>

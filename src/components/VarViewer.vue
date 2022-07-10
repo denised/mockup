@@ -1,10 +1,14 @@
 <script>
+import { prettyprint } from '../utility.js';
+
 export default {
-  props: ['datapoints'],
+  props: ['datapoints', 'title', 'slidermin', 'slidermax'],
 
   data() {
     return {
-      realdp: null,
+      realdp: [],
+      minval: 0,
+      maxval: 1
     };
   },
 
@@ -19,45 +23,80 @@ export default {
   },
   methods: {
     tester() {
-      this.realdp[5].enabled = !this.realdp[5].enabled;
+      this.realdp[5].highlight = !this.realdp[5].highlight;
     },
+    prettyprint,
   },
 };
 </script>
 
 <template>
-  <p>Pardon the mess... There are {{ enabled.length }} items here.</p>
-  <ul class="source-list">
-    <li v-for="item of realdp">
-      <input type="checkbox" :checked="item.enabled" />
-      <span class="source">{{ item.source }}</span>
-      (<span class="category">{{ item.category }}</span
-      >):
-      <span class="value">
-        {{ item.original_value }} {{ item.original_units }}
-        <span v-if="item.original_value != item.value">
-          = {{ item.value }} {{ item.units }}</span
-        >
-      </span>
-      <span class="citation"
-        ><a href="item.link">{{ item.citation }}</a>
-      </span>
-    </li>
-  </ul>
+  <h2>
+    {{ title }}
+    <span class="units" v-if="realdp.length"><br />{{ realdp[0].units }}</span>
+  </h2>
   <input type="button" value="Click Me" @click="tester" />
+  <div id="chart">
+
+  </div>
+  <div id="source-list">
+    <ul>
+      <li
+        v-for="item of realdp"
+        @pointerenter="item.highlight = true"
+        @pointerleave="item.highlight = false"
+      >
+        <input type="checkbox" :checked="item.enabled" />
+        <span class="source">{{ item.source }}</span>
+        (<span class="category">{{ item.category }}</span
+        >): <span class="value">{{ prettyprint(item.value) }}</span>
+        <!-- Show more details when highlighted -->
+        <Teleport to="#pane">
+          <div v-if="item.highlight" class="citation">
+            <a href="item.link">{{ item.citation }}</a>
+            <div class="value">
+              {{ prettyprint(item.original_value) }}
+              <span class="units">{{ item.original_units }}</span>
+              <span v-if="item.original_value != item.value">
+                = {{ prettyprint(item.value) }} {{ item.units }}</span
+              >
+            </div>
+          </div>
+        </Teleport>
+      </li>
+    </ul>
+    <div id="pane"></div>
+  </div>
 </template>
 
 <style scoped>
-.source-list {
-  list-style: none;
+#source-list {
+  font-size: 14px;
+  line-height: 15px;
 }
-.citation {
-  display: none;
+#source-list ul {
+  list-style: none;
+  padding: 2px;
+}
+#source-list li:hover {
+  background-color: antiquewhite;
 }
 .category {
   font-size: 80%;
 }
+.citation {
+  padding: 0.5em;
+  font-size: 12px;
+  line-height: 15px;
+}
 .value {
   font-size: 80%;
+}
+h2 .units {
+  font-size: 60%;
+}
+#pane {
+  height: 80px;
+  background-color: antiquewhite;
 }
 </style>
