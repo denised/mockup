@@ -8,19 +8,28 @@ export default {
     return {
       realdp: [],
       minval: 0,
-      maxval: 1
+      maxval: 1,
+      range: 1,
     };
   },
 
   mounted() {
     this.realdp = this.datapoints;
+    this.minval = this.slidermin
+      ? this.slidermin
+      : 0.9 * Math.min(...this.realdp.map((x) => x.value));
+    this.maxval = this.slidermax
+      ? this.slidermax
+      : 1.1 * Math.max(...this.realdp.map((x) => x.value));
+    this.range = this.maxval - this.minval;
+    this.realdp = this.realdp.map((item, r = this.range) => {
+      item.xpos = (item.value / r).toString() + '%';
+      return item;
+    });
+    console.log(this);
   },
 
-  computed: {
-    enabled() {
-      return this.realdp.filter((item) => item.enabled);
-    },
-  },
+  computed: {},
   methods: {
     tester() {
       this.realdp[5].highlight = !this.realdp[5].highlight;
@@ -35,10 +44,17 @@ export default {
     {{ title }}
     <span class="units" v-if="realdp.length"><br />{{ realdp[0].units }}</span>
   </h2>
-  <input type="button" value="Click Me" @click="tester" />
   <div id="chart">
-
+    <div
+      v-for="item of realdp"
+      class="point"
+      :class="{ enabled: item.enabled }"
+      :style="{ color: 'red', left: item.xpos }"
+    >
+      x
+    </div>
   </div>
+  <input type="button" value="Click Me" @click="tester" />
   <div id="source-list">
     <ul>
       <li
@@ -98,5 +114,14 @@ h2 .units {
 #pane {
   height: 80px;
   background-color: antiquewhite;
+}
+#chart {
+  width: 100%;
+  height: 80px;
+  position: relative;
+}
+#chart .point {
+  position: absolute;
+  top: 10px;
 }
 </style>
