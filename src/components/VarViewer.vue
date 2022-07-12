@@ -15,18 +15,7 @@ export default {
 
   mounted() {
     this.realdp = this.datapoints;
-    this.minval = this.slidermin
-      ? this.slidermin
-      : 0.9 * Math.min(...this.realdp.map((x) => x.value));
-    this.maxval = this.slidermax
-      ? this.slidermax
-      : 1.1 * Math.max(...this.realdp.map((x) => x.value));
-    this.range = this.maxval - this.minval;
-    this.realdp = this.realdp.map((item, r = this.range) => {
-      item.xpos = (item.value / r).toString() + '%';
-      return item;
-    });
-    console.log(this);
+    this.set_positions();
   },
 
   computed: {},
@@ -35,6 +24,19 @@ export default {
       this.realdp[5].highlight = !this.realdp[5].highlight;
     },
     prettyprint,
+    set_positions() {
+      this.minval = this.slidermin
+        ? this.slidermin
+        : 0.9 * Math.min(...this.realdp.map((x) => x.value));
+      this.maxval = this.slidermax
+        ? this.slidermax
+        : 1.1 * Math.max(...this.realdp.map((x) => x.value));
+      this.range = this.maxval - this.minval;
+      for (let i in this.realdp) {
+        this.realdp[i].xpos =
+          ((100 * this.realdp[i].value) / this.range).toString() + '%';
+      }
+    },
   },
 };
 </script>

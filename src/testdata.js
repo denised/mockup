@@ -6,7 +6,7 @@ export const theTestData = `
       "region": "Global",
       "original_value": 0.0000011132366531800678,
       "original_units": "Average Twh per m2 Roof space per year",
-      "value": 0.004007651951448244,
+      "value": 0.0004007651951448244,
       "units": "TJ / m2 roof area"
     },
     {
