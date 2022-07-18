@@ -2,7 +2,7 @@
 import { prettyprint } from '../utility.js';
 
 export default {
-  props: ['datapoints', 'title', 'slidermin', 'slidermax'],
+  props: ['datapoints', 'title', 'slidermin', 'slidermax', 'sliderval'],
 
   data() {
     return {
@@ -10,6 +10,7 @@ export default {
       minval: 0,
       maxval: 1,
       range: 1,
+      value: 1,
     };
   },
 
@@ -20,9 +21,6 @@ export default {
 
   computed: {},
   methods: {
-    tester() {
-      this.realdp[5].highlight = !this.realdp[5].highlight;
-    },
     prettyprint,
     set_positions() {
       this.minval = this.slidermin
@@ -36,6 +34,9 @@ export default {
         this.realdp[i].xpos =
           ((100 * this.realdp[i].value) / this.range).toString() + '%';
       }
+      this.value = this.sliderval
+        ? this.sliderval
+        : this.minval + this.range / 2;
     },
   },
 };
@@ -50,24 +51,33 @@ export default {
     <div
       v-for="item of realdp"
       class="point"
-      :class="{ enabled: item.enabled }"
-      :style="{ color: 'red', left: item.xpos }"
+      :class="{ en: item.enabled, hi: item.highlight }"
+      :style="{ left: item.xpos }"
+      @pointerenter="item.highlight = true"
+      @pointerleave="item.highlight = false"
     >
-      x
+      &vert;
     </div>
+    <div class="line"></div>
+    <div class="thumb" :style="{ left: value }"></div>
+    <div class="val">{{ prettyprint(this.value) }}</div>
   </div>
-  <input type="button" value="Click Me" @click="tester" />
   <div id="source-list">
     <ul>
       <li
         v-for="item of realdp"
         @pointerenter="item.highlight = true"
         @pointerleave="item.highlight = false"
+        :class="{ en: item.enabled, hi: item.highlight }"
       >
-        <input type="checkbox" :checked="item.enabled" />
+        <input
+          type="checkbox"
+          :checked="item.enabled"
+          @click="item.enabled = !item.enabled"
+        />
         <span class="source">{{ item.source }}</span>
-        (<span class="category">{{ item.category }}</span
-        >): <span class="value">{{ prettyprint(item.value) }}</span>
+        <span class="category"> ({{ item.category }})</span>:
+        <span class="value">{{ prettyprint(item.value) }}</span>
         <!-- Show more details when highlighted -->
         <Teleport to="#pane">
           <div v-if="item.highlight" class="citation">
@@ -96,7 +106,7 @@ export default {
   list-style: none;
   padding: 2px;
 }
-#source-list li:hover {
+#source-list li.hi {
   background-color: antiquewhite;
 }
 .category {
@@ -121,9 +131,37 @@ h2 .units {
   width: 100%;
   height: 80px;
   position: relative;
+  background-color: antiquewhite;
 }
 #chart .point {
   position: absolute;
-  top: 10px;
+  bottom: 20px;
+  color: #bbb;
+}
+#chart .point.en {
+  color: black;
+}
+#chart .point.hi {
+  color: blue !important;
+  font-weight: bold;
+}
+#chart .line {
+  position: absolute;
+  width: 100%;
+  height: 0;
+  border-top: inset;
+  bottom: 32px;
+}
+#chart .thumb {
+  position: absolute;
+  width: 2px;
+  height: 15px;
+  bottom: 20px;
+  border: solid black;
+}
+#chart .val {
+  position: absolute;
+  bottom: 0;
+  font-size: 70%;
 }
 </style>
