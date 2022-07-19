@@ -2,7 +2,7 @@ export const theTestData = `
 [
     {
       "source": "Project Drawdown",
-      "category": "baseline",
+      "category": "plausible",
       "region": "Global",
       "original_value": 0.0000011132366531800678,
       "original_units": "Average Twh per m2 Roof space per year",

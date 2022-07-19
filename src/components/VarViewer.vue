@@ -19,7 +19,11 @@ export default {
     this.set_positions();
   },
 
-  computed: {},
+  computed: {
+    slider_pos() {
+      return (this.value - this.minval) / this.range;
+    }
+  },
   methods: {
     prettyprint,
     set_positions() {
@@ -38,6 +42,10 @@ export default {
         ? this.sliderval
         : this.minval + this.range / 2;
     },
+    update_slider_pos(e) {
+      const newval = (e.target.value * this.range) + this.minval;
+      this.value = newval;
+    }
   },
 };
 </script>
@@ -56,10 +64,11 @@ export default {
       @pointerenter="item.highlight = true"
       @pointerleave="item.highlight = false"
     >
-      &vert;
+      &#x1F7C2;
     </div>
-    <div class="line"></div>
-    <div class="thumb" :style="{ left: value }"></div>
+    <input type="range" id="slider" min=0 max=1 step="any"
+      :value="slider_pos"
+      @input="update_slider_pos">
     <div class="val">{{ prettyprint(this.value) }}</div>
   </div>
   <div id="source-list">
@@ -135,7 +144,7 @@ h2 .units {
 }
 #chart .point {
   position: absolute;
-  bottom: 20px;
+  bottom: 15px;
   color: #bbb;
 }
 #chart .point.en {
@@ -145,23 +154,18 @@ h2 .units {
   color: blue !important;
   font-weight: bold;
 }
-#chart .line {
-  position: absolute;
-  width: 100%;
-  height: 0;
-  border-top: inset;
-  bottom: 32px;
-}
-#chart .thumb {
-  position: absolute;
-  width: 2px;
-  height: 15px;
-  bottom: 20px;
-  border: solid black;
-}
 #chart .val {
   position: absolute;
   bottom: 0;
   font-size: 70%;
+  left: 5px;
+}
+#slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%;
+  position: absolute;
+  bottom: 34px;
+  height: 2px;
 }
 </style>
