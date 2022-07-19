@@ -11,6 +11,7 @@ export default {
       maxval: 1,
       range: 1,
       value: 1,
+      show_tab: 0,
     };
   },
 
@@ -22,7 +23,10 @@ export default {
   computed: {
     slider_pos() {
       return (this.value - this.minval) / this.range;
-    }
+    },
+    tclass() {
+      return 't' + this.show_tab;
+    },
   },
   methods: {
     prettyprint,
@@ -43,9 +47,16 @@ export default {
         : this.minval + this.range / 2;
     },
     update_slider_pos(e) {
-      const newval = (e.target.value * this.range) + this.minval;
+      const newval = e.target.value * this.range + this.minval;
       this.value = newval;
-    }
+    },
+    tab_show(n = 0) {
+      if (n) {
+        this.show_tab = n;
+      } else {
+        this.show_tab = this.show_tab ? 0 : 1;
+      }
+    },
   },
 };
 </script>
@@ -66,47 +77,70 @@ export default {
     >
       &#x1F7C2;
     </div>
-    <input type="range" id="slider" min=0 max=1 step="any"
+    <input
+      type="range"
+      id="slider"
+      min="0"
+      max="1"
+      step="any"
       :value="slider_pos"
-      @input="update_slider_pos">
+      @input="update_slider_pos"
+    />
     <div class="val">{{ prettyprint(this.value) }}</div>
   </div>
-  <div id="source-list">
-    <ul>
-      <li
-        v-for="item of realdp"
-        @pointerenter="item.highlight = true"
-        @pointerleave="item.highlight = false"
-        :class="{ en: item.enabled, hi: item.highlight }"
+  <div id="details">
+    <div :class="tclass" id="detail_control">
+      <span id="source-button" @click="tab_show()" class="tbutton tsources"
+        >Sources</span
       >
-        <input
-          type="checkbox"
-          :checked="item.enabled"
-          @click="item.enabled = !item.enabled"
-        />
-        <span class="source">{{ item.source }}</span>
-        <span class="category"> ({{ item.category }})</span>:
-        <span class="value">{{ prettyprint(item.value) }}</span>
-        <!-- Show more details when highlighted -->
-        <Teleport to="#pane">
-          <div v-if="item.highlight" class="citation">
-            <a href="item.link">{{ item.citation }}</a>
-            <div class="value">
-              {{ prettyprint(item.original_value) }}
-              <span class="units">{{ item.original_units }}</span>
-              <span v-if="item.original_value != item.value">
-                = {{ prettyprint(item.value) }} {{ item.units }}</span
-              >
+      <span v-if="show_tab != 0">
+        | <span @click="tab_show(1)" class="tbutton tlist"> List </span> |
+        <span @click="tab_show(2)" class="tbutton tsource">
+          Select by Source</span
+        >
+        |
+        <span @click="tab_show(3)" class="tbutton tcat">
+          Select by Category</span
+        >
+      </span>
+    </div>
+    <div id="source-list" v-if="show_tab == 1">
+      <ul>
+        <li
+          v-for="item of realdp"
+          @pointerenter="item.highlight = true"
+          @pointerleave="item.highlight = false"
+          :class="{ en: item.enabled, hi: item.highlight }"
+        >
+          <input
+            type="checkbox"
+            :checked="item.enabled"
+            @click="item.enabled = !item.enabled"
+          />
+          <span class="source">{{ item.source }}</span>
+          <span class="category"> ({{ item.category }})</span>:
+          <span class="value">{{ prettyprint(item.value) }}</span>
+          <!-- Show more details when highlighted -->
+          <Teleport to="#pane">
+            <div v-if="item.highlight" class="citation">
+              <a href="item.link">{{ item.citation }}</a>
+              <div class="value">
+                {{ prettyprint(item.original_value) }}
+                <span class="units">{{ item.original_units }}</span>
+                <span v-if="item.original_value != item.value">
+                  = {{ prettyprint(item.value) }} {{ item.units }}</span
+                >
+              </div>
             </div>
-          </div>
-        </Teleport>
-      </li>
-    </ul>
-    <div id="pane"></div>
+          </Teleport>
+        </li>
+      </ul>
+      <div id="pane"></div>
+    </div>
   </div>
 </template>
 
-<style scoped>
+<style module>
 #source-list {
   font-size: 14px;
   line-height: 15px;
@@ -161,11 +195,14 @@ h2 .units {
   left: 5px;
 }
 #slider {
-  -webkit-appearance: none;  /* Override default CSS styles */
+  -webkit-appearance: none; /* Override default CSS styles */
   appearance: none;
   width: 100%;
   position: absolute;
   bottom: 34px;
   height: 2px;
+}
+.tbutton:hover {
+  border: solid #999;
 }
 </style>
