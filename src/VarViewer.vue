@@ -1,5 +1,5 @@
 <script>
-import { prettyprint } from '../utility.js';
+import { prettyprint } from './utility.js';
 
 export default {
   props: ['datapoints', 'title', 'slidermin', 'slidermax', 'sliderval'],
@@ -11,6 +11,8 @@ export default {
       maxval: 1,
       range: 1,
       value: 1,
+      show_details: false,
+      active_tab: 0,
     };
   },
 
@@ -46,12 +48,8 @@ export default {
       const newval = e.target.value * this.range + this.minval;
       this.value = newval;
     },
-    tab_show(n = 0) {
-      if (n) {
-        this.show_tab = n;
-      } else {
-        this.show_tab = this.show_tab ? 0 : 1;
-      }
+    toggle_details() {
+      this.show_details = !this.show_details;
     },
   },
 };
@@ -84,11 +82,9 @@ export default {
     />
     <div class="val">{{ prettyprint(this.value) }}</div>
   </div>
-  <div id="details">
-    <div :class="tclass" id="detail_control">
-      <span id="source-button">Sources</span>
-    </div>
-    <div id="source-list">
+  <div id="details-button">Sources</div>
+  <b-tabs id="details" v-model="active_tab">
+    <b-tab-item id="source-list" label="List">
       <ul>
         <li
           v-for="item of realdp"
@@ -120,8 +116,9 @@ export default {
         </li>
       </ul>
       <div id="pane"></div>
-    </div>
-  </div>
+    </b-tab-item>
+    <b-tab-item label="Whee"> Something else. </b-tab-item>
+  </b-tabs>
 </template>
 
 <style scoped>
@@ -185,8 +182,5 @@ h2 .units {
   position: absolute;
   bottom: 34px;
   height: 2px;
-}
-.tbutton:hover {
-  border: solid #999;
 }
 </style>
