@@ -11,7 +11,6 @@ export default {
       maxval: 1,
       range: 1,
       value: 1,
-      show_tab: 0,
     };
   },
 
@@ -23,9 +22,6 @@ export default {
   computed: {
     slider_pos() {
       return (this.value - this.minval) / this.range;
-    },
-    tclass() {
-      return 't' + this.show_tab;
     },
   },
   methods: {
@@ -90,21 +86,9 @@ export default {
   </div>
   <div id="details">
     <div :class="tclass" id="detail_control">
-      <span id="source-button" @click="tab_show()" class="tbutton tsources"
-        >Sources</span
-      >
-      <span v-if="show_tab != 0">
-        | <span @click="tab_show(1)" class="tbutton tlist"> List </span> |
-        <span @click="tab_show(2)" class="tbutton tsource">
-          Select by Source</span
-        >
-        |
-        <span @click="tab_show(3)" class="tbutton tcat">
-          Select by Category</span
-        >
-      </span>
+      <span id="source-button">Sources</span>
     </div>
-    <div id="source-list" v-if="show_tab == 1">
+    <div id="source-list">
       <ul>
         <li
           v-for="item of realdp"
@@ -140,7 +124,7 @@ export default {
   </div>
 </template>
 
-<style module>
+<style scoped>
 #source-list {
   font-size: 14px;
   line-height: 15px;
