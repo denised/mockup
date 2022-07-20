@@ -11,9 +11,10 @@
 
     <script type="module">
       import { createApp } from 'vue';
-      import { Tabs } from 'buefy';
+      import { Tabs } from '@oruga-ui/oruga-next';
       import VarViewer from './src/VarViewer.vue';
       import { theTestData } from './src/testdata.js';
+      import '@oruga-ui/oruga-next/dist/oruga.css';
 
       const td = JSON.parse(theTestData);
       for (var i in td) {

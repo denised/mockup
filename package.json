@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "buefy": "^0.9.21",
+    "@oruga-ui/oruga-next": "^0.5.5",
     "vue": "^3.2.37"
   },
   "devDependencies": {
