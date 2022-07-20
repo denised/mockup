@@ -21,7 +21,10 @@
         td[i].highlight = false;
       }
 
-      const app = createApp(VarViewer);
+      const app = createApp(VarViewer, {
+        datapoints: td,
+        title: 'Energy Saved',
+      });
       app.use(Tabs);
       app.mount('#app');
     </script>

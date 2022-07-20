@@ -18,7 +18,7 @@ export default {
 
   mounted() {
     this.realdp = this.datapoints;
-    this.set_positions();
+    this.initialize();
   },
 
   computed: {
@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     prettyprint,
-    set_positions() {
+    initialize() {
       this.minval = this.slidermin
         ? this.slidermin
         : 0.9 * Math.min(...this.realdp.map((x) => x.value));
@@ -44,7 +44,7 @@ export default {
         ? this.sliderval
         : this.minval + this.range / 2;
     },
-    update_slider_pos(e) {
+    update_value(e) {
       const newval = e.target.value * this.range + this.minval;
       this.value = newval;
     },
@@ -78,47 +78,11 @@ export default {
       max="1"
       step="any"
       :value="slider_pos"
-      @input="update_slider_pos"
+      @input="update_value"
     />
     <div class="val">{{ prettyprint(this.value) }}</div>
   </div>
   <div id="details-button">Sources</div>
-  <b-tabs id="details" v-model="active_tab">
-    <b-tab-item id="source-list" label="List">
-      <ul>
-        <li
-          v-for="item of realdp"
-          @pointerenter="item.highlight = true"
-          @pointerleave="item.highlight = false"
-          :class="{ en: item.enabled, hi: item.highlight }"
-        >
-          <input
-            type="checkbox"
-            :checked="item.enabled"
-            @click="item.enabled = !item.enabled"
-          />
-          <span class="source">{{ item.source }}</span>
-          <span class="category"> ({{ item.category }})</span>:
-          <span class="value">{{ prettyprint(item.value) }}</span>
-          <!-- Show more details when highlighted -->
-          <Teleport to="#pane">
-            <div v-if="item.highlight" class="citation">
-              <a href="item.link">{{ item.citation }}</a>
-              <div class="value">
-                {{ prettyprint(item.original_value) }}
-                <span class="units">{{ item.original_units }}</span>
-                <span v-if="item.original_value != item.value">
-                  = {{ prettyprint(item.value) }} {{ item.units }}</span
-                >
-              </div>
-            </div>
-          </Teleport>
-        </li>
-      </ul>
-      <div id="pane"></div>
-    </b-tab-item>
-    <b-tab-item label="Whee"> Something else. </b-tab-item>
-  </b-tabs>
 </template>
 
 <style scoped>
