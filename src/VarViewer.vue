@@ -82,7 +82,67 @@ export default {
     />
     <div class="val">{{ prettyprint(this.value) }}</div>
   </div>
-  <div id="details-button">Sources</div>
+  <div
+    id="details-button"
+    @click="toggle_details()"
+    :class="show_details ? 'sd' : 'hd'"
+  >
+    Sources
+  </div>
+  <o-tabs
+    v-model="active_tab"
+    :animated="false"
+    :multiline="false"
+    :class="show_details ? '' : 'hide'"
+  >
+    <o-tab-item value="0" label="List">
+      <ul>
+        <li
+          v-for="item of realdp"
+          @pointerenter="item.highlight = true"
+          @pointerleave="item.highlight = false"
+          :class="{ en: item.enabled, hi: item.highlight }"
+        >
+          <input
+            type="checkbox"
+            :checked="item.enabled"
+            @click="item.enabled = !item.enabled"
+          />
+          <span class="source">{{ item.source }}</span>
+          <span class="category"> ({{ item.category }})</span>:
+          <span class="value">{{ prettyprint(item.value) }}</span>
+          <!-- Show more details when highlighted -->
+          <Teleport to="#pane">
+            <div v-if="item.highlight" class="citation">
+              <a href="item.link">{{ item.citation }}</a>
+              <div class="value">
+                {{ prettyprint(item.original_value) }}
+                <span class="units">{{ item.original_units }}</span>
+                <span v-if="item.original_value != item.value">
+                  = {{ prettyprint(item.value) }} {{ item.units }}</span
+                >
+              </div>
+            </div>
+          </Teleport>
+        </li>
+      </ul>
+      <div id="pane"></div>
+    </o-tab-item>
+    <o-tab-item :value="1" label="Select by Source">
+      Lorem <br />
+      ipsum <br />
+      dolor <br />
+      sit <br />
+      amet.
+    </o-tab-item>
+    <o-tab-item :value="2" label="Select by Category">
+      Lorem <br />
+      ipsum <br />
+      dolor <br />
+      sit <br />
+      amet.
+    </o-tab-item>
+  </o-tabs>
 </template>
 
 <style scoped>
@@ -146,5 +206,9 @@ h2 .units {
   position: absolute;
   bottom: 34px;
   height: 2px;
+}
+
+.hide {
+  display: none;
 }
 </style>
