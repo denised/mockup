@@ -11,7 +11,7 @@
 
     <script type="module">
       import { createApp } from 'vue';
-      import { Tabs } from '@oruga-ui/oruga-next';
+      import Oruga from '@oruga-ui/oruga-next';
       import VarViewer from './src/VarViewer.vue';
       import { theTestData } from './src/testdata.js';
       import '@oruga-ui/oruga-next/dist/oruga.css';
@@ -26,8 +26,13 @@
         datapoints: td,
         title: 'Energy Saved',
       });
-      app.use(Tabs);
+      app.use(Oruga);
       app.mount('#app');
     </script>
   </body>
 </html>
+<style>
+  #app {
+    max-width: 500px;
+  }
+</style>

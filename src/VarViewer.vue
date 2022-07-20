@@ -82,17 +82,16 @@ export default {
     />
     <div class="val">{{ prettyprint(this.value) }}</div>
   </div>
-  <div
-    id="details-button"
+  <o-button
     @click="toggle_details()"
-    :class="show_details ? 'sd' : 'hd'"
+    :icon-left="show_details ? 'caret-right' : 'caret-down'"
+    >Sources</o-button
   >
-    Sources
-  </div>
   <o-tabs
     v-model="active_tab"
     :animated="false"
     :multiline="false"
+    type="boxed"
     :class="show_details ? '' : 'hide'"
   >
     <o-tab-item value="0" label="List">
