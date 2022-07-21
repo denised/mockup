@@ -67,7 +67,10 @@ export default {
       <div
         v-for="item of realdp"
         class="point absolute bottom-[14px]"
-        :class="{ en: item.enabled, hi: item.highlight }"
+        :class="{
+          'text-blue-500': item.highlight,
+          'text-zinc-400': !item.enabled,
+        }"
         :style="{ left: item.xpos }"
         @pointerenter="item.highlight = true"
         @pointerleave="item.highlight = false"
@@ -84,61 +87,68 @@ export default {
         @input="update_value"
       />
       <div class="absolute bottom-0.5 left-1 text-xs">
-        {{ prettyprint(this.value) }}
+        {{ prettyprint(value) }}
       </div>
     </div>
-    <o-button outlined class="text-sm p-1" @click="toggle_details()">
+    <div
+      class="w-fit rounded-sm text-sm p-1.5 pr-2 hover:bg-zinc-400"
+      @click="toggle_details()"
+    >
       {{ show_details ? 'hide' : 'show' }} sources
-    </o-button>
-    <o-tabs v-model="active_tab" :animated="false" type="boxed">
-      <o-tab-item value="0" label="List">
-        <ul>
-          <li
-            v-for="item of realdp"
-            @pointerenter="item.highlight = true"
-            @pointerleave="item.highlight = false"
-            :class="{ en: item.enabled, hi: item.highlight }"
-          >
-            <input
-              type="checkbox"
-              :checked="item.enabled"
-              @click="item.enabled = !item.enabled"
-            />
-            <span class="source">{{ item.source }}</span>
-            <span class="category"> ({{ item.category }})</span>:
-            <span class="value">{{ prettyprint(item.value) }}</span>
-            <!-- Show more details when highlighted -->
-            <Teleport to="#pane">
-              <div v-if="item.highlight" class="citation">
-                <a href="item.link">{{ item.citation }}</a>
-                <div class="value">
-                  {{ prettyprint(item.original_value) }}
-                  <span class="units">{{ item.original_units }}</span>
-                  <span v-if="item.original_value != item.value">
-                    = {{ prettyprint(item.value) }} {{ item.units }}</span
-                  >
+    </div>
+    <!-- why isn't v-if working?  It shows when clicked, but does not hide. 
+         same thing happens if v-if is on the o-tabs component directly. -->
+    <div id="details-container" v-if="show_details">
+      <o-tabs v-model="active_tab" :animated="false">
+        <o-tab-item value="0" label="List">
+          <ul>
+            <li
+              v-for="item of realdp"
+              @pointerenter="item.highlight = true"
+              @pointerleave="item.highlight = false"
+              :class="{ en: item.enabled, hi: item.highlight }"
+            >
+              <input
+                type="checkbox"
+                :checked="item.enabled"
+                @click="item.enabled = !item.enabled"
+              />
+              <span class="source">{{ item.source }}</span>
+              <span class="category"> ({{ item.category }})</span>:
+              <span class="value">{{ prettyprint(item.value) }}</span>
+              <!-- Show more details when highlighted -->
+              <Teleport to="#pane">
+                <div v-if="item.highlight" class="citation">
+                  <a href="item.link">{{ item.citation }}</a>
+                  <div class="value">
+                    {{ prettyprint(item.original_value) }}
+                    <span class="units">{{ item.original_units }}</span>
+                    <span v-if="item.original_value != item.value">
+                      = {{ prettyprint(item.value) }} {{ item.units }}</span
+                    >
+                  </div>
                 </div>
-              </div>
-            </Teleport>
-          </li>
-        </ul>
-        <div id="pane"></div>
-      </o-tab-item>
-      <o-tab-item :value="1" label="Select by Source">
-        Lorem <br />
-        ipsum <br />
-        dolor <br />
-        sit <br />
-        amet.
-      </o-tab-item>
-      <o-tab-item :value="2" label="Select by Category">
-        Lorem <br />
-        ipsum <br />
-        dolor <br />
-        sit <br />
-        amet.
-      </o-tab-item>
-    </o-tabs>
+              </Teleport>
+            </li>
+          </ul>
+          <div id="pane"></div>
+        </o-tab-item>
+        <o-tab-item :value="1" label="Select by Source">
+          Lorem <br />
+          ipsum <br />
+          dolor <br />
+          sit <br />
+          amet.
+        </o-tab-item>
+        <o-tab-item :value="2" label="Select by Category">
+          Lorem <br />
+          ipsum <br />
+          dolor <br />
+          sit <br />
+          amet.
+        </o-tab-item>
+      </o-tabs>
+    </div>
   </div>
 </template>
 
@@ -150,5 +160,8 @@ export default {
   position: absolute;
   bottom: 34px;
   height: 2px;
+}
+.my-o-tabs {
+  overflow: hidden;
 }
 </style>
