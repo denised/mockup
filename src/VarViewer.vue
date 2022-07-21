@@ -56,23 +56,23 @@ export default {
 </script>
 
 <template>
-  <div class="container">
-    <h2 class="text-lime-100">
+  <div class="container max-w-sm">
+    <h1 class="text-lg text-center">
       {{ title }}
-      <span class="units" v-if="realdp.length"
-        ><br />{{ realdp[0].units }}</span
-      >
+    </h1>
+    <h2 class="text-sm text-center leading-none" v-if="realdp.length">
+      {{ realdp[0].units }}
     </h2>
-    <div id="chart">
+    <div id="chart" class="container relative h-32 bg-zinc-100">
       <div
         v-for="item of realdp"
-        class="point"
+        class="point absolute bottom-[14px]"
         :class="{ en: item.enabled, hi: item.highlight }"
         :style="{ left: item.xpos }"
         @pointerenter="item.highlight = true"
         @pointerleave="item.highlight = false"
       >
-        &#x1F7C2;
+        🟂
       </div>
       <input
         type="range"
@@ -83,20 +83,14 @@ export default {
         :value="slider_pos"
         @input="update_value"
       />
-      <div class="val">{{ prettyprint(this.value) }}</div>
+      <div class="absolute bottom-0.5 left-1 text-xs">
+        {{ prettyprint(this.value) }}
+      </div>
     </div>
-    <o-button
-      @click="toggle_details()"
-      :icon-left="show_details ? 'caret-right' : 'caret-down'"
-      >Sources</o-button
-    >
-    <o-tabs
-      v-model="active_tab"
-      :animated="false"
-      :multiline="false"
-      type="boxed"
-      :class="show_details ? '' : 'hide'"
-    >
+    <o-button outlined class="text-sm p-1" @click="toggle_details()">
+      {{ show_details ? 'hide' : 'show' }} sources
+    </o-button>
+    <o-tabs v-model="active_tab" :animated="false" type="boxed">
       <o-tab-item value="0" label="List">
         <ul>
           <li
@@ -149,11 +143,6 @@ export default {
 </template>
 
 <style scoped>
-#chart .point {
-  position: absolute;
-  bottom: 15px;
-  color: #bbb;
-}
 #slider {
   -webkit-appearance: none; /* Override default CSS styles */
   appearance: none;
