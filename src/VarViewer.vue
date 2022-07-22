@@ -97,8 +97,11 @@ export default {
       {{ show_details ? 'hide' : 'show' }} sources
     </div>
     <!-- why isn't v-if working?  It shows when clicked, but does not hide. 
-         same thing happens if v-if is on the o-tabs component directly. -->
-    <div id="details-container" v-if="show_details">
+         same thing happens if v-if is on the o-tabs component directly.
+         v-show works though, so we'll stick with that. -->
+    <div id="details-container" v-show="show_details">
+      <!-- So if I'm understanding Oruga properly, the correct way to style
+      oruga-generated stuff is to -->
       <o-tabs v-model="active_tab" :animated="false">
         <o-tab-item value="0" label="List">
           <ul>
@@ -161,7 +164,15 @@ export default {
   bottom: 34px;
   height: 2px;
 }
-.my-o-tabs {
-  overflow: hidden;
+/* styling of the oruga tabs component. 
+   Currently this isn't getting applied at all?
+   Why not?    Doesn't matter if I use just nav, or just
+   .o-tabs__nav --- or if I set the text to red.  It just isn't 
+   showing up in the rules list. 
+   
+   If I put the customization in index.css, following the techniques
+   used by tailwind, it does show up in the rules list, but at the bottom. */
+nav.o-tabs__nav {
+  overflow-x: hidden !important;
 }
 </style>

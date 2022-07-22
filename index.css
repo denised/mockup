@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .o-tabs__nav {
+    overflow-y: hidden;
+  }
+  .o-tabs__nav-item-wrapper {
+    @apply text-xs;
+  }
+}
