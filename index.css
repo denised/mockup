@@ -23,3 +23,10 @@
     border-bottom: 2px solid;
     font-weight: 600;
   }
+
+
+  /* Size font-awesome with text */
+  .fa-icon {
+    width: auto;
+    height: 1em;
+  }

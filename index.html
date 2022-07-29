@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Variable Viewer</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <div id="app"></div>
 
     <script type="module">
-      import { createApp } from 'vue';
-      import Oruga from '@oruga-ui/oruga-next';
-      import VarViewer from './src/VarViewer.vue';
-      import { theTestData } from './src/testdata.js';
-      import './index.css';
-      import '@oruga-ui/oruga-next/dist/oruga.css';
+        import { createApp } from 'vue';
+        import Oruga from '@oruga-ui/oruga-next';
+        import VarViewer from './src/VarViewer.vue';
+        import { theTestData } from './src/testdata.js';
+        import './index.css';
+        import '@oruga-ui/oruga-next/dist/oruga.css';
+        import '@fortawesome/fontawesome-free/css/fontawesome.css';       
+        import '@fortawesome/fontawesome-free/css/solid.css';
 
-      const td = JSON.parse(theTestData);
-      for (var i in td) {
-        td[i].enabled = true;
-        td[i].highlight = false;
-      }
+        const td = JSON.parse(theTestData);
+        for (var i in td) {
+            td[i].enabled = true;
+            td[i].highlight = false;
+        }
 
-      const app = createApp(VarViewer, {
-        datapoints: td,
-        title: 'Energy Saved',
-      });
-      app.use(Oruga);
-      app.mount('#app');
+        const app = createApp(VarViewer, {
+            datapoints: td,
+            title: 'Energy Saved',
+        });
+        app.use(Oruga);
+        app.mount('#app');
     </script>
-  </body>
+</body>
+
 </html>

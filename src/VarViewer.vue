@@ -13,6 +13,7 @@ export default {
             value: 1,
             show_details: false,
             active_tab: 0,
+            last_item: null
         };
     },
 
@@ -56,7 +57,14 @@ export default {
             if (this.show_details) {
                 this.$refs.tabs.homePressed();  // internal Oruga Tab method
             }
+            if (!this.show_details) {
+                this.last_item = null;
+            }
         },
+        highlight_list_item(item) {
+            item.highlight = true;
+            this.last_item = item;
+        }
     },
 };
 </script>
@@ -92,14 +100,14 @@ export default {
         <!-- why isn't v-if working?  It shows when clicked, but does not hide. 
          same thing happens if v-if is on the o-tabs component directly.
          v-show works though, so we'll stick with that. -->
-        <div id="details-container" v-show="show_details">
+        <div id="details-container" v-show="show_details" class="cursor-default">
             <!-- Oruga styling is in ../index.css -->
             <o-tabs v-model="active_tab" :animated="false" ref="tabs">
                 <!-- Tab 1: the list of entries -->
                 <o-tab-item value="0" label="List">
                     <ul>
-                        <li v-for="item of realdp" @pointerenter="item.highlight = true"
-                            @pointerleave="item.highlight = false" class="text-sm" :class="{
+                        <li v-for="item of realdp" @pointerenter="highlight_list_item(item)"
+                            @pointerleave="item.highlight = false" class="text-sm ml-2" :class="{
                                 'text-blue-500': item.highlight,
                                 'text-zinc-400': !item.enabled,                                
                             }">
@@ -111,8 +119,11 @@ export default {
                             {{ item.source }} ({{ item.category }}): {{ prettyprint(item.value) }}
                             <!-- Show more details when highlighted -->
                             <Teleport to="#pane">
-                                <div v-if="item.highlight">
-                                    <a href="item.link">{{ item.citation }}</a>
+                                <div v-if="item == last_item">
+                                    {{ item.citation }}
+                                    <span v-if="item.link">
+                                        <a :href="item.link" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                    </span>
                                     <br/>
                                     {{ prettyprint(item.original_value) }} {{ item.original_units }}
                                     <span v-if="item.original_value != item.value"> = 
@@ -148,7 +159,6 @@ export default {
 <style scoped>
 #slider {
     -webkit-appearance: none;
-    /* Override default CSS styles */
     appearance: none;
     width: 100%;
     position: absolute;
