@@ -54,16 +54,17 @@ export default {
   },
 };
 </script>
-
+<!-- TEMPLATE -->
 <template>
-  <div class="container max-w-sm">
+  <div class="container max-w-sm mx-auto mt-5">
     <h1 class="text-lg text-center">
       {{ title }}
     </h1>
     <h2 class="text-sm text-center leading-none" v-if="realdp.length">
       {{ realdp[0].units }}
     </h2>
-    <div id="chart" class="container relative h-32 bg-zinc-100">
+    <!-- BEGIN CHART -->
+    <div id="chart" class="container relative h-32 bg-zinc-100 cursor-pointer">
       <div
         v-for="item of realdp"
         class="point absolute bottom-[14px]"
@@ -90,8 +91,9 @@ export default {
         {{ prettyprint(value) }}
       </div>
     </div>
+    <!-- BEGIN DETAILS -->
     <div
-      class="w-fit rounded-sm text-sm p-1.5 pr-2 hover:bg-zinc-400"
+      class="w-fit text-sm p-1.5 pr-2 hover:bg-zinc-400"
       @click="toggle_details()"
     >
       {{ show_details ? 'hide' : 'show' }} sources
@@ -100,9 +102,9 @@ export default {
          same thing happens if v-if is on the o-tabs component directly.
          v-show works though, so we'll stick with that. -->
     <div id="details-container" v-show="show_details">
-      <!-- So if I'm understanding Oruga properly, the correct way to style
-      oruga-generated stuff is to -->
+      <!-- Oruga styling is in ../index.css -->
       <o-tabs v-model="active_tab" :animated="false">
+        <!-- Tab 1: the list of entries -->
         <o-tab-item value="0" label="List">
           <ul>
             <li
@@ -134,8 +136,9 @@ export default {
               </Teleport>
             </li>
           </ul>
-          <div id="pane"></div>
+          <div id="pane" class="w-full h-36 bg-zinc-100 py-1 px-2 text-sm"></div>
         </o-tab-item>
+        <!-- Tab 2: selection by source-->
         <o-tab-item :value="1" label="Select by Source">
           Lorem <br />
           ipsum <br />
@@ -143,6 +146,7 @@ export default {
           sit <br />
           amet.
         </o-tab-item>
+        <!-- Tab 3: se3lection by category -->
         <o-tab-item :value="2" label="Select by Category">
           Lorem <br />
           ipsum <br />
@@ -164,15 +168,5 @@ export default {
   bottom: 34px;
   height: 2px;
 }
-/* styling of the oruga tabs component. 
-   Currently this isn't getting applied at all?
-   Why not?    Doesn't matter if I use just nav, or just
-   .o-tabs__nav --- or if I set the text to red.  It just isn't 
-   showing up in the rules list. 
-   
-   If I put the customization in index.css, following the techniques
-   used by tailwind, it does show up in the rules list, but at the bottom. */
-nav.o-tabs__nav {
-  overflow-x: hidden !important;
-}
+
 </style>

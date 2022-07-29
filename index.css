@@ -2,11 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .o-tabs__nav {
+/* Oruga styling has to go here?  Probably a better way to do this
+ * exists, but this works for now.
+ * Also, had to increase specicifity of rules to win out over Oruga default.
+ * And other weirdnesses.  Not important.
+ */
+ .o-tabs__nav {
     overflow-y: hidden;
   }
-  .o-tabs__nav-item-wrapper {
-    @apply text-xs;
+  #details-container .o-tabs__nav-item {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    margin-bottom: 2px;
   }
-}
+  #details-container .o-tabs__nav-item:hover {
+    background-color: rgb(161 161 170);
+  }
+  #details-container .o-tabs__nav-item-wrapper[aria-selected='true'] .o-tabs__nav-item {
+    @apply: border-zinc-600 !important;
+    border-bottom: 2px solid;
+    font-weight: 600;
+  }
