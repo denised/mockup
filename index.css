@@ -11,8 +11,8 @@
     overflow-y: hidden;
   }
   #details-container .o-tabs__nav-item {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
     margin-bottom: 2px;
   }
   #details-container .o-tabs__nav-item:hover {

@@ -33,10 +33,10 @@ export default {
 
         // the bar positions we (might) show on the chart
         minbar() {
-            return Math.min(...this.selected_values);
+            return this.selected_values.length ? Math.min(...this.selected_values) : null;
         },
         maxbar() {
-            return Math.max(...this.selected_values);
+            return this.selected_values.length ? Math.max(...this.selected_values) : null;
         },
         medianbar() {
             return Stats.median(this.selected_values);
@@ -97,8 +97,8 @@ export default {
             <h1 class="text-lg text-center">
                 {{ title }}
             </h1>
-            <h2 class="text-sm text-center leading-none" v-if="realdp.length">
-                {{ realdp[0].units }}
+            <h2 class="text-sm text-center leading-none">
+                {{ realdp.length ? realdp[0].units : "" }}
             </h2>
             <!-- value -->
             <div class="flex justify-center m-auto my-2 ring-offset-2 ring-2">
@@ -109,7 +109,7 @@ export default {
         </div>
 
 
-        <div id="explore" v-if="show_explore">
+        <div id="explore" v-show="show_explore">
             <!-- BEGIN CHART -->
             <div id="chart" class="container relative h-32 bg-zinc-100 cursor-pointer">
                 <!-- points -->
@@ -122,11 +122,11 @@ export default {
                 </div>
 
                 <!-- bars -->
-                <div class="vv-vbar" :style="{ left: val_to_xpos(minbar) }"><b>min</b> {{ prettyprint(minbar) }}</div>
-                <!-- <div class="vv-vbar" :style="{left : val_to_xpos(quartiles[0])}"><b>1Q</b> {{prettyprint(quartiles[0])}}</div>
-            <div class="vv-vbar" :style="{left : val_to_xpos(medianbar)}"><b>median</b> {{prettyprint(medianbar)}}</div>
-            <div class="vv-vbar" :style="{left : val_to_xpos(quartiles[2])}"><b>3Q</b> {{prettyprint(quartiles[2])}}</div> -->
-                <div class="vv-vbar" :style="{ left: val_to_xpos(maxbar) }"><b>max</b> {{ prettyprint(maxbar) }}</div>
+                <div class="vv-vbar" v-if="minbar!==null"    :style="{left: val_to_xpos(minbar) }"><b>min</b> {{ prettyprint(minbar) }}</div>
+                <div class="vv-vbar" v-if="quartiles!==null" :style="{left: val_to_xpos(quartiles[0])}"><b>1Q</b> {{prettyprint(quartiles[0])}}</div>
+                <div class="vv-vbar" v-if="medianbar!==null" :style="{left: val_to_xpos(medianbar)}"><b>median</b> {{prettyprint(medianbar)}}</div>
+                <div class="vv-vbar" v-if="quartiles!==null" :style="{left: val_to_xpos(quartiles[2])}"><b>3Q</b> {{prettyprint(quartiles[2])}}</div>
+                <div class="vv-vbar" v-if="maxbar!==null"    :style="{left: val_to_xpos(maxbar) }"><b>max</b> {{ prettyprint(maxbar) }}</div>
                 <!-- slider -->
                 <input type="range" id="slider" :min="minval" :max="maxval" step="any" v-model="value"
                     class="accent-blue-500" />
@@ -138,14 +138,14 @@ export default {
             <!-- why isn't v-if working?  It shows when clicked, but does not hide. 
          same thing happens if v-if is on the o-tabs component directly.
          v-show works though, so we'll stick with that. -->
-            <div id="details-container" v-show="show_details" class="cursor-default">
+            <div id="details-container" v-show="show_details" class="cursor-default text-xs">
                 <!-- Oruga styling is in ../index.css -->
                 <o-tabs v-model="active_tab" :animated="false" ref="tabs">
                     <!-- Tab 1: the list of entries -->
                     <o-tab-item value="0" label="List">
                         <ul>
                             <li v-for="item of realdp" @pointerenter="highlight_list_item(item)"
-                                @pointerleave="item.highlight = false" class="text-sm ml-2" :class="{
+                                @pointerleave="item.highlight = false" class="ml-2" :class="{
                                     'text-blue-500': item.highlight,
                                     'text-zinc-400': !item.enabled,
                                 }">

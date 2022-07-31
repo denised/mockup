@@ -1,15 +1,6 @@
 export const theTestData = `
 [
     {
-      "source": "Project Drawdown",
-      "category": "plausible",
-      "region": "Global",
-      "original_value": 0.0000011132366531800678,
-      "original_units": "Average Twh per m2 Roof space per year",
-      "value": 0.0004007651951448244,
-      "units": "TJ / m2 roof area"
-    },
-    {
       "source": "Jaffal2012",
       "category": "plausible",
       "citation": "Jaffal, I., Ouldboukhitine, S.-E., & Belarbi, R. (2012). A comprehensive study of the impact of green roofs on building energy performance. Renewable Energy, 43, 157–164. https://doi.org/10.1016/j.renene.2011.12.004",
@@ -120,7 +111,7 @@ export const theTestData = `
       "region": "China",
       "year": 2014,
       "original_value": 367.58538043478256,
-      "original_units": "kWh/m2 roof area FOR TOP FLOOR:  Roof area = floor area",
+      "original_units": "kWh/m2 roof area",
       "value": 0.002085267663736789,
       "units": "TJ / m2 roof area",
       "notes": "Office-1 top floor"
@@ -132,7 +123,7 @@ export const theTestData = `
       "region": "China",
       "year": 2014,
       "original_value": 145.99254278728603,
-      "original_units": "kWh/m2 roof area FOR TOP FLOOR:  Roof area = floor area",
+      "original_units": "kWh/m2 roof area",
       "value": 0.0008281981406903372,
       "units": "TJ / m2 roof area",
       "notes": "Office-1 top floor"
@@ -144,7 +135,7 @@ export const theTestData = `
       "region": "China",
       "year": 2014,
       "original_value": 98.79652173913043,
-      "original_units": "kWh/m2 roof area FOR TOP FLOOR:  Roof area = floor area",
+      "original_units": "kWh/m2 roof area",
       "value": 0.0005604607882625769,
       "units": "TJ / m2 roof area",
       "notes": "Office-1 top floor"
@@ -156,7 +147,7 @@ export const theTestData = `
       "region": "China",
       "year": 2014,
       "original_value": 19.839347826086954,
-      "original_units": "kWh/m2 roof area FOR TOP FLOOR:  Roof area = floor area",
+      "original_units": "kWh/m2 roof area",
       "value": 0.00011254623468004291,
       "units": "TJ / m2 roof area",
       "notes": "Office-1 top floor"
@@ -168,7 +159,7 @@ export const theTestData = `
       "region": "China",
       "year": 2014,
       "original_value": 164.66267441860464,
-      "original_units": "kWh/m2 roof area FOR TOP FLOOR:  Roof area = floor area",
+      "original_units": "kWh/m2 roof area",
       "value": 0.0009341115524872069,
       "units": "TJ / m2 roof area",
       "notes": "Residence-1 top floor"
@@ -180,7 +171,7 @@ export const theTestData = `
       "region": "China",
       "year": 2014,
       "original_value": 90.6403041825095,
-      "original_units": "kWh/m2 roof area FOR TOP FLOOR:  Roof area = floor area",
+      "original_units": "kWh/m2 roof area",
       "value": 0.0005141915467897335,
       "units": "TJ / m2 roof area",
       "notes": "Residence-1 top floor"
@@ -192,7 +183,7 @@ export const theTestData = `
       "region": "China",
       "year": 2014,
       "original_value": 101.92679347826086,
-      "original_units": "kWh/m2 roof area FOR TOP FLOOR:  Roof area = floor area",
+      "original_units": "kWh/m2 roof area",
       "value": 0.0005782184434462436,
       "units": "TJ / m2 roof area",
       "notes": "Residence-1 top floor"
@@ -204,7 +195,7 @@ export const theTestData = `
       "region": "China",
       "year": 2014,
       "original_value": 1.443641304347826,
-      "original_units": "kWh/m2 roof area FOR TOP FLOOR:  Roof area = floor area",
+      "original_units": "kWh/m2 roof area",
       "value": 0.000008189603532193325,
       "units": "TJ / m2 roof area",
       "notes": "Residence-1 top floor"
