@@ -1,0 +1,22 @@
+name: Deploy to github pages
+  on:
+    push:                  # we push to develop, or...
+      branches: [ develop ]
+    workflow_dispatch:     # we select the action manually from the github console
+
+  jobs:
+    gh-pages-deploy:
+      name: Deploying to gh-pages
+      runs-on: ubuntu-latest
+      steps:
+        - name: Setup Node.js for use with actions
+          uses: actions/setup-node@v2
+          with:
+            version:  16.x
+            
+        - name: Checkout branch
+          uses: actions/checkout@v2
+
+        - name: Run deploy script
+          run: "./.github/deploy-gh-pages.sh"
+          shell: bash
