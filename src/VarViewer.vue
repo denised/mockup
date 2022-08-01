@@ -159,13 +159,13 @@ export default {
                     class="accent-blue-500" />
             </div>
             <!-- BEGIN DETAILS -->
-            <div class="w-fit text-xs p-1.5 pr-2 hover:bg-zinc-300" @click="toggle_details()">
+            <div class="w-fit text-sm p-1.5 pr-2 hover:bg-zinc-300" @click="toggle_details()">
                 <i class="fa-solid" :class="{'fa-caret-down': show_details, 'fa-caret-right': !show_details}"></i> sources
             </div>
             <!-- why isn't v-if working?  It shows when clicked, but does not hide. 
          same thing happens if v-if is on the o-tabs component directly.
          v-show works though, so we'll stick with that. -->
-            <div id="details-container" v-show="show_details" class="cursor-default text-xs">
+            <div id="details-container" v-show="show_details" class="cursor-default text-sm">
                 <!-- Oruga styling is in ../index.css -->
                 <o-tabs v-model="active_tab" :animated="false" ref="tabs">
                     <!-- Tab 1: the list of entries -->
@@ -238,7 +238,6 @@ export default {
     bottom: 35px;
     width: 80px;
     height: 4px;
-    font-size: 60%;
     color: red;
     border-top: 1px red;
 

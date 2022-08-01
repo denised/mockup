@@ -1,7 +1,7 @@
 name: Deploy to github pages
 on:
-  push:                  # we push to develop, or...
-    branches: [ develop ]
+  push:                  # we push to main, or...
+    branches: [ main ]
   workflow_dispatch:     # we select the action manually from the github console
 
 jobs:
