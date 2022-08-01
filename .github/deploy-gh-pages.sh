@@ -20,6 +20,7 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 # BUILD      #
 ##############
 
+npm install
 npm run build
  
 #######################
