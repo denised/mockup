@@ -22,5 +22,7 @@ jobs:
         shell: bash
 
       - name: Run deploy script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: "./.github/deploy-gh-pages.sh"
         shell: bash

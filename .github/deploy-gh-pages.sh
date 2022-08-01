@@ -52,8 +52,7 @@ EOF
 git add .
  
 # commit all the new files
-msg="Updating Docs for commit ${GITHUB_SHA} made on `date -d"@${SOURCE_DATE_EPOCH}" --iso-8601=seconds` from ${GITHUB_REF} by ${GITHUB_ACTOR}"
-git commit -am "${msg}"
+git commit -am "Updating depoloyed mockup for gh-pages"
  
 # overwrite the contents of the gh-pages branch on our github.com repo
 git push deploy gh-pages --force
