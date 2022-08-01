@@ -144,16 +144,11 @@ export default {
                 </div>
 
                 <!-- bars -->
-                <div class="vv-vbar" v-if="minbar!==null" :style="{left: val_to_xpos(minbar) }"><b>min</b> {{
-                    prettyprint(minbar) }}</div>
-                <div class="vv-vbar" v-if="quartiles!==null" :style="{left: val_to_xpos(quartiles[0])}"><b>1Q</b>
-                    {{prettyprint(quartiles[0])}}</div>
-                <div class="vv-vbar" v-if="medianbar!==null" :style="{left: val_to_xpos(medianbar)}"><b>median</b>
-                    {{prettyprint(medianbar)}}</div>
-                <div class="vv-vbar" v-if="quartiles!==null" :style="{left: val_to_xpos(quartiles[2])}"><b>3Q</b>
-                    {{prettyprint(quartiles[2])}}</div>
-                <div class="vv-vbar" v-if="maxbar!==null" :style="{left: val_to_xpos(maxbar) }"><b>max</b> {{
-                    prettyprint(maxbar) }}</div>
+                <div class="vv-vbar" v-if="minbar!==null" :style="{left: val_to_xpos(minbar) }"><b>min</b></div>
+                <div class="vv-vbar" v-if="quartiles!==null" :style="{left: val_to_xpos(quartiles[0])}"><b>1Q</b></div>
+                <div class="vv-vbar" v-if="medianbar!==null" :style="{left: val_to_xpos(medianbar)}"><b>median</b></div>
+                <div class="vv-vbar" v-if="quartiles!==null" :style="{left: val_to_xpos(quartiles[2])}"><b>3Q</b></div>
+                <div class="vv-vbar" v-if="maxbar!==null" :style="{left: val_to_xpos(maxbar) }"><b>max</b></div>
                 <!-- slider -->
                 <input type="range" id="slider" :min="minval" :max="maxval" step="any" v-model="value"
                     class="accent-blue-500" />
