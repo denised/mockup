@@ -14,7 +14,9 @@ export default {
             show_explore: false,
             show_details: false,
             active_tab: 0,
-            last_item: null
+            last_item: null,
+            sources: {},
+            categories: {},
         };
     },
 
@@ -48,12 +50,12 @@ export default {
     methods: {
 
         initialize() {
-            this.minval = this.slidermin
+            // And if mx is zero, then what?
+            const mx = Math.max(...this.realdp.map((x) => x.value));
+            this.minval = (this.slidermin !== undefined)
                 ? this.slidermin
-                : 0.9 * Math.min(...this.realdp.map((x) => x.value));
-            this.maxval = this.slidermax
-                ? this.slidermax
-                : 1.1 * Math.max(...this.realdp.map((x) => x.value));
+                : Math.min(...this.realdp.map((x) => x.value)) - 0.1 * mx;
+            this.maxval = (this.slidermax !== undefined) ? this.slidermax : mx + 0.1 * mx;
             this.range = this.maxval - this.minval;
             for (let i in this.realdp) {
                 this.realdp[i].xpos = (100 * (this.realdp[i].value - this.minval) / this.range).toString() + '%';
@@ -61,6 +63,11 @@ export default {
             this.value = this.initial_value
                 ? this.initial_value
                 : this.minval + this.maxval / 2;
+            
+            // initialize sources and categories maps
+            this.realdp.map(x=>this.sources[x.source]=true);
+            this.realdp.map(x=>this.categories[x.category]=true);
+          
             console.log(this);
         },
         toggle_details() {
@@ -71,6 +78,7 @@ export default {
             if (this.show_details) {
                 this.$refs.tabs.homePressed();  // internal Oruga Tab method
             }
+            // Clear any items in the details pane
             if (!this.show_details) {
                 this.last_item = null;
             }
@@ -78,6 +86,22 @@ export default {
         highlight_list_item(item) {
             item.highlight = true;
             this.last_item = item;
+        },
+        toggle_source(s) {
+            const v = this.sources[s] = !this.sources[s];
+            for( const i in this.realdp ) {
+                if (this.realdp[i].source == s) {
+                    this.realdp[i].enabled = v;
+                }
+            }
+        },
+        toggle_category(c) {
+            const v = this.categories[c] = !this.categories[c];
+            for( const i in this.realdp ) {
+                if (this.realdp[i].category == c) {
+                    this.realdp[i].enabled = v;
+                }
+            }
         },
 
         // These are utilities that are used to construct values that affect rendering.
@@ -103,8 +127,8 @@ export default {
             <!-- value -->
             <div class="flex justify-center m-auto my-2 ring-offset-2 ring-2">
                 <div class="grow"> {{ prettyprint(value) }} </div>
-                <div class="flex-none ml-1.5 hover:bg-slate-400"
-                    @click="show_explore=true"><i class="fa-solid fa-pen-to-square"></i></div>
+                <div class="flex-none ml-1.5 pl-[0.01em] hover:bg-slate-400" @click="show_explore=true"><i
+                        class="fa-solid fa-pen-to-square"></i></div>
             </div>
         </div>
 
@@ -113,27 +137,32 @@ export default {
             <!-- BEGIN CHART -->
             <div id="chart" class="container relative h-32 bg-zinc-100 cursor-pointer">
                 <!-- points -->
-                <div v-for="item of realdp" class="point absolute bottom-[14px]" :class="{
+                <div v-for="item of realdp" v-show="show_details" class="point absolute bottom-[14px]" :class="{
                     'text-blue-500': item.highlight,
-                    'text-zinc-400': !item.enabled,
+                    'text-zinc-100': !item.enabled,
                 }" :style="{ left: item.xpos }" @pointerenter="item.highlight = true"
                     @pointerleave="item.highlight = false">
                     🟂
                 </div>
 
                 <!-- bars -->
-                <div class="vv-vbar" v-if="minbar!==null"    :style="{left: val_to_xpos(minbar) }"><b>min</b> {{ prettyprint(minbar) }}</div>
-                <div class="vv-vbar" v-if="quartiles!==null" :style="{left: val_to_xpos(quartiles[0])}"><b>1Q</b> {{prettyprint(quartiles[0])}}</div>
-                <div class="vv-vbar" v-if="medianbar!==null" :style="{left: val_to_xpos(medianbar)}"><b>median</b> {{prettyprint(medianbar)}}</div>
-                <div class="vv-vbar" v-if="quartiles!==null" :style="{left: val_to_xpos(quartiles[2])}"><b>3Q</b> {{prettyprint(quartiles[2])}}</div>
-                <div class="vv-vbar" v-if="maxbar!==null"    :style="{left: val_to_xpos(maxbar) }"><b>max</b> {{ prettyprint(maxbar) }}</div>
+                <div class="vv-vbar" v-if="minbar!==null" :style="{left: val_to_xpos(minbar) }"><b>min</b> {{
+                    prettyprint(minbar) }}</div>
+                <div class="vv-vbar" v-if="quartiles!==null" :style="{left: val_to_xpos(quartiles[0])}"><b>1Q</b>
+                    {{prettyprint(quartiles[0])}}</div>
+                <div class="vv-vbar" v-if="medianbar!==null" :style="{left: val_to_xpos(medianbar)}"><b>median</b>
+                    {{prettyprint(medianbar)}}</div>
+                <div class="vv-vbar" v-if="quartiles!==null" :style="{left: val_to_xpos(quartiles[2])}"><b>3Q</b>
+                    {{prettyprint(quartiles[2])}}</div>
+                <div class="vv-vbar" v-if="maxbar!==null" :style="{left: val_to_xpos(maxbar) }"><b>max</b> {{
+                    prettyprint(maxbar) }}</div>
                 <!-- slider -->
                 <input type="range" id="slider" :min="minval" :max="maxval" step="any" v-model="value"
                     class="accent-blue-500" />
             </div>
             <!-- BEGIN DETAILS -->
-            <div class="w-fit text-sm p-1.5 pr-2 hover:bg-zinc-400" @click="toggle_details()">
-                {{ show_details ? 'hide' : 'show' }} sources
+            <div class="w-fit text-xs p-1.5 pr-2 hover:bg-zinc-300" @click="toggle_details()">
+                <i class="fa-solid" :class="{'fa-caret-down': show_details, 'fa-caret-right': !show_details}"></i> sources
             </div>
             <!-- why isn't v-if working?  It shows when clicked, but does not hide. 
          same thing happens if v-if is on the o-tabs component directly.
@@ -153,7 +182,7 @@ export default {
                                     :class="{
                                         'accent-blue-500': item.highlight,
                                         'accent-zinc-400': !item.enabled,
-                                    }" />&nbsp;
+                                    }" />&thinsp;
                                 {{ item.source }} ({{ item.category }}): {{ prettyprint(item.value) }}
                                 <!-- Show more details when highlighted -->
                                 <Teleport to="#pane">
@@ -172,23 +201,23 @@ export default {
                                 </Teleport>
                             </li>
                         </ul>
-                        <div id="pane" class="w-full h-36 bg-zinc-100 py-1 px-2 text-sm"></div>
+                        <div id="pane" class="w-full h-36 bg-zinc-100 py-1 px-2"></div>
                     </o-tab-item>
                     <!-- Tab 2: selection by source-->
                     <o-tab-item :value="1" label="Select by Source">
-                        Lorem <br />
-                        ipsum <br />
-                        dolor <br />
-                        sit <br />
-                        amet.
+                        <ul>
+                            <li v-for="(checked, s) in sources" class="ml-2">
+                                <input type="checkbox" :checked="checked" @click="toggle_source(s)"/>&thinsp;{{ s }}
+                            </li>
+                        </ul>
                     </o-tab-item>
                     <!-- Tab 3: se3lection by category -->
                     <o-tab-item :value="2" label="Select by Category">
-                        Lorem <br />
-                        ipsum <br />
-                        dolor <br />
-                        sit <br />
-                        amet.
+                        <ul>
+                            <li v-for="(checked, c) in categories" class="ml-2">
+                                <input type="checkbox" :checked="checked" @click="toggle_category(c)"/>&thinsp;{{ c }}
+                            </li>
+                        </ul>
                     </o-tab-item>
                 </o-tabs>
             </div>
