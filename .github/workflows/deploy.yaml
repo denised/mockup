@@ -16,6 +16,10 @@ jobs:
           
       - name: Checkout branch
         uses: actions/checkout@v2
+      
+      - name: Enable script
+        run: chmod +x "./.github/deploy-gh-pages.sh"
+        shell: bash
 
       - name: Run deploy script
         run: "./.github/deploy-gh-pages.sh"
