@@ -137,10 +137,8 @@ export default {
             <!-- BEGIN CHART -->
             <div id="chart" class="container relative h-32 bg-zinc-100 cursor-pointer">
                 <!-- points -->
-                <div v-for="item of realdp" v-show="show_details" class="point absolute bottom-[14px]" :class="{
-                    'text-blue-500': item.highlight,
-                    'text-zinc-100': !item.enabled,
-                }" :style="{ left: item.xpos }" @pointerenter="item.highlight = true"
+                <div v-for="item of realdp" v-show="show_details && item.enabled" class="point absolute bottom-[14px]" :class="{
+                    'text-blue-500': item.highlight}" :style="{ left: item.xpos }" @pointerenter="item.highlight = true"
                     @pointerleave="item.highlight = false">
                     🟂
                 </div>
